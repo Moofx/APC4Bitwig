@@ -5,11 +5,12 @@
 CLIP_LENGTHS = [ '1 Beat', '2 Beats', '1 Bar', '2 Bars', '4 Bars', '8 Bars', '16 Bars', '32 Bars' ];
 CLIP_LENGTHS_INDICES = [ 6, 5, 4, 3, 2, 1, 0, 7 ];
 
-AbstractView.prototype.stopPressed = false;
-AbstractView.prototype.isTempoInc = false;
-AbstractView.prototype.isTempoDec = false;
-AbstractView.prototype.isKnobMoving = false;
+AbstractView.prototype.stopPressed   = false;
+AbstractView.prototype.isTempoInc    = false;
+AbstractView.prototype.isTempoDec    = false;
+AbstractView.prototype.isKnobMoving  = false;
 AbstractView.prototype.moveStartTime = 0;
+AbstractView.prototype.isLayer       = false;
 
 AbstractView.prototype.usesButton = function (buttonID)
 {
@@ -316,25 +317,85 @@ AbstractView.prototype.onDeviceValueKnob = function (index, value)
     this.startCheckKnobMovement ();
 };
 
+AbstractView.prototype.onBankLeft = function (event)
+{
+    if (event.isDown ())
+        this.model.getCursorDevice ().previousParameterPage ();
+};
+
+AbstractView.prototype.onBankRight = function (event)
+{
+    if (event.isDown ())
+        this.model.getCursorDevice ().nextParameterPage ();
+};
+
 AbstractView.prototype.onDeviceLeft = function (event)
 {
     if (!event.isDown ())
         return;
 
-    if (this.surface.isShiftPressed ())
-        this.model.getCursorDevice ().previousParameterPage ();
+    var cd = this.model.getCursorDevice ();
+    
+    if (this.surface.isMkII () && this.surface.isShiftPressed ())
+    {
+        // Exit layer
+        if (this.isLayer)
+            this.isLayer = false;
+        else
+        {
+            if (cd.isNested ())
+            {
+                cd.selectParent ();
+                cd.selectChannel ();
+                this.isLayer = true;
+            }
+        }
+        return;
+    }
+    
+    if (this.isLayer)
+    {
+        var sel = cd.getSelectedLayer ();
+        var index = sel == null || sel.index == 0 ? 0 : sel.index - 1;
+        cd.selectLayer (index);
+    }
     else
-        this.model.getCursorDevice ().selectPrevious ();
+        cd.selectPrevious ();
 };
 
 AbstractView.prototype.onDeviceRight = function (event)
 {
     if (!event.isDown ())
         return;
-    if (this.surface.isShiftPressed ())
-        this.model.getCursorDevice ().nextParameterPage ();
+
+    var cd = this.model.getCursorDevice ();
+
+    if (this.surface.isMkII () && this.surface.isShiftPressed ())
+    {
+        // Enter layer
+        if (!cd.hasLayers ())
+            return;
+        if (this.isLayer)
+        {
+            var dl = cd.getSelectedLayer ();
+            if (dl != null)
+            {
+                cd.enterLayer (dl.index);
+                cd.selectFirstDeviceInLayer (dl.index);
+            }
+        }
+        this.isLayer = !this.isLayer;
+        return;
+    }
+    
+    if (this.isLayer)
+    {
+        var sel = cd.getSelectedLayer ();
+        var index = sel == null ? 0 : sel.index + 1;
+        cd.selectLayer (index > 7 ? 7 : index);
+    }
     else
-        this.model.getCursorDevice ().selectNext ();
+        cd.selectNext ();
 };
 
 AbstractView.prototype.onClipTrack = function (event)
@@ -378,16 +439,16 @@ AbstractView.prototype.onDetailView = function (event)
         return;
         
     var app = this.model.getApplication ();
-    switch (app.perspective)
+    switch (app.getPanelLayout ())
     {
         case 'ARRANGE':
-            app.setPerspective ('MIX');
+            app.setPanelLayout ('MIX');
             break;
         case 'MIX':
-            app.setPerspective ('EDIT');
+            app.setPanelLayout ('EDIT');
             break;
         case 'EDIT':
-            app.setPerspective ('ARRANGE');
+            app.setPanelLayout ('ARRANGE');
             break;
     }
 };

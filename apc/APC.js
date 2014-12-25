@@ -418,18 +418,26 @@ APC.prototype.handleEvent = function (note, value, channel)
 
         case APC_BUTTON_DEVICE_LEFT:
             if (this.isMkII ())
-                this.buttonStates[this.shiftButtonId] = ButtonEvent.DOWN;
-            view.onDeviceLeft (event);
-            if (this.isMkII ())
-                this.buttonStates[this.shiftButtonId] = ButtonEvent.UP;
+                view.onBankLeft (event);
+            else
+            {
+                if (this.isShiftPressed ())
+                    view.onBankLeft (event);
+                else
+                    view.onDeviceLeft (event);
+            }
             break;
         
         case APC_BUTTON_DEVICE_RIGHT:
             if (this.isMkII ())
-                this.buttonStates[this.shiftButtonId] = ButtonEvent.DOWN;
-            view.onDeviceRight (event);
-            if (this.isMkII ())
-                this.buttonStates[this.shiftButtonId] = ButtonEvent.UP;
+                view.onBankRight (event);
+            else
+            {
+                if (this.isShiftPressed ())
+                    view.onBankRight (event);
+                else
+                    view.onDeviceRight (event);
+            }
             break;
             
         case APC_BUTTON_BANK:
