@@ -290,6 +290,11 @@ AbstractView.prototype.onBank = function (event)
         if (mode >= MODE_SEND1 && mode <= MODE_SEND8)
             this.surface.setPendingMode (MODE_PAN);
     }
+    
+    var tb = this.model.getCurrentTrackBank ();
+    var track = tb.getSelectedTrack ();
+    if (track == null)
+        tb.select (0);
 };
 
 //--------------------------------------
