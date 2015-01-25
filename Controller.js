@@ -15,7 +15,7 @@ function Controller (product)
     setModelSpecificColors (product);
     this.model = new Model (1, this.scales, 8, 5, 8);
     
-    this.lastSlotSelection = null;
+    // this.lastSlotSelection = null;
     this.model.getTrackBank ().addTrackSelectionListener (doObject (this, Controller.prototype.handleTrackChange));
     
     this.surface = new APC (output, input, product);
@@ -190,7 +190,7 @@ Controller.prototype.handleTrackChange = function (index, isSelected)
     var tb = this.model.getCurrentTrackBank ();
     if (!isSelected)
     {
-        this.lastSlotSelection = tb.getSelectedSlot (index);
+        // this.lastSlotSelection = tb.getSelectedSlot (index);
         return;
     }
 
@@ -205,11 +205,11 @@ Controller.prototype.handleTrackChange = function (index, isSelected)
         this.surface.getActiveView ().updateNoteMapping ();
      
     // Select the slot on the new track with the same index as on the previous track
-    if (this.lastSlotSelection != null)
+    /* if (this.lastSlotSelection != null)
         tb.showClipInEditor (index, this.lastSlotSelection.index);
     else
     {
         var slot = tb.getSelectedSlot (index);
         tb.showClipInEditor (index, slot != null ? slot.index : 0);
-    }
+    }*/
 };
