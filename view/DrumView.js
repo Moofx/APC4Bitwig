@@ -1,5 +1,5 @@
 // Written by Jürgen Moßgraber - mossgrabers.de
-// (c) 2014
+// (c) 2014-2015
 // Licensed under LGPLv3 - http://www.gnu.org/licenses/lgpl-3.0.txt
 
 DrumView.NUM_DISPLAY_COLS = 16;
@@ -11,8 +11,6 @@ function DrumView (model)
     this.offsetY = DrumView.DRUM_START_KEY;
     this.canScrollUp = false;
     this.canScrollDown = false;
-    // TODO: Read the information in Bitwig 1.1
-    this.pads = initArray ({ exists: true, solo: false, mute: false }, 12);
     this.selectedPad = 0;
     this.pressedKeys = initArray (0, 128);
     this.noteMap = this.scales.getEmptyMatrix ();
@@ -46,10 +44,10 @@ DrumView.prototype.drawSceneButtons = function ()
     this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_5, APC_BUTTON_STATE_ON);
 };
 
-DrumView.prototype.updateArrows = function ()
+DrumView.prototype.updateArrowStates = function ()
 {
     this.canScrollLeft = this.offsetX > 0;
-    this.canScrollRight = true; // We do not know the number of steps
+    this.canScrollRight = true; // TODO API extension required - We do not know the number of steps
 };
 
 DrumView.prototype.updateNoteMapping = function ()
@@ -85,10 +83,18 @@ DrumView.prototype.onGridNote = function (note, velocity)
 
     if (x < 4)
     {
-        this.selectedPad = 4 * y + x;   // 0-16
+        // 4x3 Drum Pad Grid
+
+        this.selectedPad = 4 * y + x;   // 0-12
+        var playedPad = velocity == 0 ? -1 : this.selectedPad;
+
         // Mark selected note
         this.pressedKeys[this.offsetY + this.selectedPad] = velocity;
         this.surface.sendMidiEvent (0x90, this.offsetY + this.selectedPad, velocity);
+        
+        if (playedPad < 0)
+            return;
+        
         return;
     }
 
@@ -159,14 +165,27 @@ DrumView.prototype.drawGrid = function ()
     var isRecording = this.model.hasRecordingState ();
 
     // 3x4 Drum Pad Grid
+    var primary = this.model.getTrackBank ().primaryDevice;
+    var hasDrumPads = primary.hasDrumPads ();
+    var isSoloed = false;
+    if (hasDrumPads)
+    {
+        for (var i = 0; i < 12; i++)
+        {
+            if (primary.getDrumPad (i).solo)
+            {
+                isSoloed = true;
+                break;
+            }
+        }
+    }
+    var isRecording = this.model.hasRecordingState ();
     for (var y = 0; y < 3; y++)
     {
         for (var x = 0; x < 4; x++)
         {
             var index = 4 * y + x;
-            var p = this.pads[index];
-            var c = this.pressedKeys[this.offsetY + index] > 0 ? (isRecording ? DrumView.COLOR_RECORD : DrumView.COLOR_PLAY) : (this.selectedPad == index ? DrumView.COLOR_SELECTED : (p.exists ? (p.mute ? DrumView.COLOR_MUTED : (p.solo ? DrumView.COLOR_SOLO : DrumView.COLOR_HAS_CONTENT)) : DrumView.COLOR_NO_CONTENT));
-            this.surface.pads.lightEx (x, 4 - y, c, null, false);
+            this.surface.pads.lightEx (x, 4 - y, this.getPadColor (index, primary, hasDrumPads, isSoloed, isRecording), null, false);
         }
     }
     
@@ -192,6 +211,24 @@ DrumView.prototype.drawGrid = function ()
         var y = 4 - Math.floor (col / 8);
         this.surface.pads.lightEx (x, 4 - y, isSet ? (hilite ? AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT : AbstractSequencerView.COLOR_CONTENT) : hilite ? AbstractSequencerView.COLOR_STEP_HILITE_CONTENT : AbstractSequencerView.COLOR_NO_CONTENT, null, false);
     }
+};
+
+DrumView.prototype.getPadColor = function (index, primary, hasDrumPads, isSoloed, isRecording)
+{
+    // Playing note?
+    if (this.pressedKeys[this.offsetY + index] > 0)
+        return isRecording ? DrumView.COLOR_RECORD : DrumView.COLOR_PLAY;
+    // Selected?
+    if (this.selectedPad == index)
+        return DrumView.COLOR_SELECTED;
+    // Exists and active?
+    var drumPad = primary.getDrumPad (index);
+    if (!drumPad.exists || !drumPad.activated)
+        return DrumView.COLOR_NO_CONTENT;
+    // Muted or soloed?
+    if (drumPad.mute || (isSoloed && !drumPad.solo))
+        return DrumView.COLOR_MUTED;
+    return drumPad.color ? drumPad.color : DrumView.COLOR_HAS_CONTENT;
 };
 
 DrumView.prototype.clearPressedKeys = function ()
