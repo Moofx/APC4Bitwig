@@ -228,7 +228,7 @@ DrumView.prototype.getPadColor = function (index, primary, hasDrumPads, isSoloed
     // Muted or soloed?
     if (drumPad.mute || (isSoloed && !drumPad.solo))
         return DrumView.COLOR_MUTED;
-    return drumPad.color ? drumPad.color : DrumView.COLOR_HAS_CONTENT;
+    return this.surface.isMkII () && drumPad.color ? drumPad.color : DrumView.COLOR_HAS_CONTENT;
 };
 
 DrumView.prototype.clearPressedKeys = function ()
