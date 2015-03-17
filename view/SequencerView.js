@@ -84,16 +84,19 @@ SequencerView.prototype.onScene = function (scene, event)
 
 SequencerView.prototype.scrollUp = function (event)
 {
-    this.offsetY = Math.min (this.clip.getRowSize () - SequencerView.NUM_OCTAVE, this.offsetY + 5);
-    this.updateScale ();
-    displayNotification (this.scales.getSequencerRangeText (this.noteMap[0], this.noteMap[7]));
+    this.updateOctave (Math.min (this.clip.getRowSize () - SequencerView.NUM_OCTAVE, this.offsetY + 5));
 };
 
 SequencerView.prototype.scrollDown = function (event)
 {
-    this.offsetY = Math.max (0, this.offsetY - 5);
+    this.updateOctave (Math.max (0, this.offsetY - 5));
+};
+
+SequencerView.prototype.updateOctave = function (value)
+{
+    this.offsetY = value;
     this.updateScale ();
-    displayNotification (this.scales.getSequencerRangeText (this.noteMap[0], this.noteMap[7]));
+    displayNotification (this.scales.getSequencerRangeText (this.noteMap[0], this.noteMap[6]));
 };
 
 SequencerView.prototype.onGridNote = function (note, velocity)
