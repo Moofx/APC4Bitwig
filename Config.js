@@ -15,11 +15,13 @@ Config.sceneScrollInterval = 100;
 // Editable configurations
 // ------------------------------
 
-Config.SCALES_SCALE = 1;
-Config.SCALES_BASE  = 2;
+Config.SCALES_SCALE  = 1;
+Config.SCALES_BASE   = 2;
+Config.SCALES_IN_KEY = 3;
 
-Config.scale             = 'Major';
-Config.scaleBase         = 'C';
+Config.scale      = 'Major';
+Config.scaleBase  = 'C';
+Config.scaleInKey = true;
 
 Config.init = function ()
 {
@@ -42,6 +44,13 @@ Config.init = function ()
         Config.scaleBase = value;
         Config.notifyListeners (Config.SCALES_BASE);
     });
+	
+    Config.scaleInScaleSetting = prefs.getEnumSetting ("In Key", "Scales", [ "In Key", "Chromatic" ], "In Key");
+    Config.scaleInScaleSetting.addValueObserver (function (value)
+    {
+        Config.scaleInKey = value == "In Key";
+        Config.notifyListeners (Config.SCALES_IN_KEY);
+    });
 };
 
 Config.setScale = function (scale)
@@ -54,12 +63,17 @@ Config.setScaleBase = function (scaleBase)
     Config.scaleBaseSetting.set (scaleBase);
 };
 
+Config.setScaleInScale = function (inScale)
+{
+    Config.scaleInScaleSetting.set (inScale ? "In Key" : "Chromatic");
+};
+
 // ------------------------------
 // Property listeners
 // ------------------------------
 
 Config.listeners = [];
-for (var i = 0; i <= Config.SCALES_BASE; i++)
+for (var i = 0; i <= Config.SCALES_IN_KEY; i++)
     Config.listeners[i] = [];
 
 Config.addPropertyListener = function (property, listener)

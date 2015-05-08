@@ -100,6 +100,12 @@ PlayView.prototype.onScene = function (scene, event)
             Config.setScale (this.scales.getName (this.scales.getSelectedScale ()));
             displayNotification (this.scales.getName (this.scales.getSelectedScale ()));
             break;
+		case 2:
+			this.scales.toggleChromatic ();
+			var isChromatic = this.scales.isChromatic ();
+			Config.setScaleInScale (!isChromatic);
+            displayNotification (isChromatic ? "Chromatic" : "In Key");
+			break;
         case 3:
             this.onOctaveUp (event);
             break;

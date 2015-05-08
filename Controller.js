@@ -45,6 +45,13 @@ function Controller (product)
         this.scales.setScaleOffsetByName (Config.scaleBase);
         this.surface.getActiveView ().updateNoteMapping ();
     }));
+    Config.addPropertyListener (Config.SCALES_IN_KEY, doObject (this, function ()
+    {
+        this.scales.setChromatic (!Config.scaleInKey);
+        var view = this.surface.getActiveView ();
+        if (view != null)
+            view.updateNoteMapping ();
+    }));
 
     this.surface.addView (VIEW_PLAY, new PlayView (this.model));
     this.surface.addView (VIEW_SESSION, new SessionView (this.model));
