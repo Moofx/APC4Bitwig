@@ -162,8 +162,6 @@ DrumView.prototype.drawGrid = function ()
         return;
     }
 
-    var isRecording = this.model.hasRecordingState ();
-
     // 3x4 Drum Pad Grid
     var primary = this.model.getTrackBank ().primaryDevice;
     var hasDrumPads = primary.hasDrumPads ();
