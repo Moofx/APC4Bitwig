@@ -391,10 +391,7 @@ APC.prototype.handleEvent = function (note, value, channel)
             break;
             
         case APC_BUTTON_MASTER:
-            if (this.isShiftPressed ())
-                view.onBank (event);
-            else
-                view.onMaster (event);
+            view.onMaster (event);
             break;
 
             

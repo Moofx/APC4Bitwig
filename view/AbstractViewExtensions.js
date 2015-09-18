@@ -274,7 +274,26 @@ AbstractView.prototype.onMasterVolume = function (value)
 
 AbstractView.prototype.onMaster = function (event)
 {
-    if (event.isDown ())
+    if (!event.isDown ())
+        return;
+    
+    if (this.surface.isShiftPressed ())
+    {
+        this.model.toggleCurrentTrackBank ();
+        if (this.model.isEffectTrackBankActive ())
+        {
+            // No Sends on effect tracks
+            var mode = this.surface.getCurrentMode ();
+            if (mode >= MODE_SEND1 && mode <= MODE_SEND8)
+                this.surface.setPendingMode (MODE_PAN);
+        }
+        
+        var tb = this.model.getCurrentTrackBank ();
+        var track = tb.getSelectedTrack ();
+        if (track == null)
+            tb.select (0);
+    }
+    else
         this.model.getMasterTrack ().select ();
 };
 
@@ -282,19 +301,9 @@ AbstractView.prototype.onBank = function (event)
 {
     if (!event.isDown ())
         return;
-    this.model.toggleCurrentTrackBank ();
-    if (this.model.isEffectTrackBankActive ())
-    {
-        // No Sends on effect tracks
-        var mode = this.surface.getCurrentMode ();
-        if (mode >= MODE_SEND1 && mode <= MODE_SEND8)
-            this.surface.setPendingMode (MODE_PAN);
-    }
     
-    var tb = this.model.getCurrentTrackBank ();
-    var track = tb.getSelectedTrack ();
-    if (track == null)
-        tb.select (0);
+    this.model.getBrowser ().browseForPresets ();
+    // TODO
 };
 
 //--------------------------------------
@@ -447,6 +456,12 @@ AbstractView.prototype.onDetailView = function (event)
 {
     if (!event.isDown ())
         return;
+    
+    if (this.surface.isShiftPressed ())
+    {
+        this.model.getCursorDevice ().toggleWindowOpen ();
+        return;
+    }    
         
     var app = this.model.getApplication ();
     switch (app.getPanelLayout ())
