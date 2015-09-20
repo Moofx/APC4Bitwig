@@ -302,9 +302,27 @@ AbstractView.prototype.onBank = function (event)
     if (!event.isDown ())
         return;
     
-    this.model.getBrowser ().browseForPresets ();
-    // TODO
+    var browser = this.model.getBrowser ();
+    
+    // Patch Browser already active?
+    if (browser.getPresetSession ().isActive)
+    {
+        // Confirm or discard new selected patch
+        this.model.getBrowser ().stopBrowsing (!this.surface.isShiftPressed ());
+        this.surface.restoreMode ();
+        return;
+    }
+    
+    browser.browseForPresets ();
+    scheduleTask (doObject (this, this.switchToBrowseView), [], 75);
 };
+
+AbstractView.prototype.switchToBrowseView = function ()
+{        
+   if (this.model.getBrowser ().getPresetSession ().isActive)
+       this.surface.setPendingMode (MODE_BROWSER);
+};
+
 
 //--------------------------------------
 // Device

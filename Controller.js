@@ -28,6 +28,7 @@ function Controller (product)
     for (i = 0; i < 8; i++)
         this.surface.addMode (MODE_SEND1 + i, new SendMode (this.model, i));
     this.surface.addMode (MODE_MACRO, new MacroMode (this.model));
+    this.surface.addMode (MODE_BROWSER, new BrowserMode (this.model));
 
     this.surface.addModeListener (doObject (this, function (oldMode, newMode)
     {
