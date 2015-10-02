@@ -299,16 +299,20 @@ AbstractView.prototype.onMaster = function (event)
 
 AbstractView.prototype.onBank = function (event)
 {
-    if (!event.isDown ())
-        return;
-    
+    if (event.isDown ())
+        this.startBrowser ();
+};
+
+AbstractView.prototype.startBrowser = function ()
+{
     var browser = this.model.getBrowser ();
     
     // Patch Browser already active?
     if (browser.getPresetSession ().isActive)
     {
         // Confirm or discard new selected patch
-        this.model.getBrowser ().stopBrowsing (!this.surface.isShiftPressed ());
+        var stopMode = this.surface.isMkII () ? !this.surface.isShiftPressed () : true;
+        this.model.getBrowser ().stopBrowsing (stopMode);
         this.surface.restoreMode ();
         return;
     }
@@ -502,7 +506,11 @@ AbstractView.prototype.onDetailView = function (event)
 
 AbstractView.prototype.onStopAllClips = function (event)
 {
-    if (event.isDown ())
+    if (!event.isDown ())
+        return;
+    if (this.surface.isShiftPressed ())
+        this.startBrowser ();
+    else
         this.model.getCurrentTrackBank ().getClipLauncherScenes ().stop ();
 };
 
