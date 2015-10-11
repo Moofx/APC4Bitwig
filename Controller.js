@@ -2,6 +2,9 @@
 // (c) 2014-2015
 // Licensed under LGPLv3 - http://www.gnu.org/licenses/lgpl-3.0.txt
 
+Scales.OCTAVE_RANGE = 5;
+
+
 function Controller (product)
 {
     Config.init ();
@@ -11,7 +14,7 @@ function Controller (product)
     var output = new MidiOutput ();
     var input = new APCMidiInput ();
     
-    this.scales = new Scales (36, 100, 8, 8);
+    this.scales = new Scales (36, 100, 8, 5);
     setModelSpecificColors (product);
     this.model = new Model (1, this.scales, 8, 5, 8, 6, 16, 16, true);
     
