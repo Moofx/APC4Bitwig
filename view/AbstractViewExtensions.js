@@ -334,16 +334,32 @@ AbstractView.prototype.switchToBrowseView = function ()
 
 AbstractView.prototype.onDeviceOnOff = function (event)
 {
-    if (event.isDown ())
+    if (!event.isDown ())
+        return;
+    if (this.surface.isShiftPressed ())
+    {
+        this.surface.isMacroActive = !this.surface.isMacroActive;
+        // Refresh mode button lights
+        this.surface.setPendingMode (this.surface.getCurrentMode ());
+    }
+    else    
         this.model.getCursorDevice ().toggleEnabledState ();
 };
 
 AbstractView.prototype.onDeviceValueKnob = function (index, value)
 {
     var cd = this.model.getCursorDevice ();
-    var param = cd.getFXParam (index);
-    param.value = value;
-    cd.setParameter (index, param.value);
+    
+    if (this.surface.isMacroActive)
+    {
+        cd.getMacro (index).getAmount ().set (value, Config.maxParameterValue);
+    }
+    else
+    {
+        var param = cd.getFXParam (index);
+        param.value = value;
+        cd.setParameter (index, param.value);
+    }
     
     this.moveStartTime = new Date ().getTime ();
     if (this.isKnobMoving)

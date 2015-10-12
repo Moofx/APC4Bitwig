@@ -156,6 +156,8 @@ function APC (output, input, product)
     output.sendSysex ("F0 47 7F " + product + " 60 00 04 41 08 02 01 F7"); // Set Mode 2
 
     this.pads = new Grid (output, this.isMkII ());
+    
+    this.isMacroActive = false;
 }
 APC.prototype = new AbstractControlSurface ();
 

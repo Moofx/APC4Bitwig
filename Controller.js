@@ -162,6 +162,7 @@ Controller.prototype.updateIndication = function (mode)
     var isPan = mode == MODE_PAN;
     
     var tb = this.model.getCurrentTrackBank ();
+    var cd = this.model.getCursorDevice ();
     for (var i = 0; i < 8; i++)
     {
         tb.setPanIndication (i, isPan);
@@ -176,22 +177,21 @@ Controller.prototype.updateIndication = function (mode)
                                         mode == MODE_SEND7 && j == 6 ||
                                         mode == MODE_SEND8 && j == 7);
         }
-
-        var cd = this.model.getCursorDevice ();
-        cd.getParameter (i).setIndication (true);
-        cd.getMacro (i).getAmount ().setIndication (mode == MODE_MACRO);
+        cd.getParameter (i).setIndication (!this.surface.isMacroActive);
+        cd.getMacro (i).getAmount ().setIndication (this.surface.isMacroActive || mode == MODE_MACRO);
     }
 };
 
 Controller.prototype.updateDeviceKnobs = function ()
 {
-    if (this.surface.getActiveView ().isKnobMoving)
+    var view = this.surface.getActiveView ();
+    if (view == null || view.isKnobMoving)
         return;
 
     var cd = this.model.getCursorDevice ();
     for (var i = 0; i < 8; i++)
     {
-        var value = cd.getFXParam (i).value;
+        var value = this.surface.isMacroActive ? cd.getMacroParam (i).value : cd.getFXParam (i).value;
         this.surface.setLED (APC_KNOB_DEVICE_KNOB_1 + i, value ? value : 0);
     }
 };
