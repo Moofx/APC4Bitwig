@@ -32,3 +32,25 @@ SessionView.prototype.drawSceneButtons = function ()
     this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_4, APC_BUTTON_STATE_OFF);
     this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_5, APC_BUTTON_STATE_OFF);
 };
+
+SessionView.prototype.drawGrid = function ()
+{
+    if (this.surface.isShiftPressed ())
+    {
+        this.drawShiftGrid ();
+        return;
+    }
+
+    AbstractSessionView.prototype.drawGrid.call (this);
+};
+
+SessionView.prototype.onGridNote = function (note, velocity)
+{
+    if (this.surface.isShiftPressed ())
+    {
+        this.onShiftGridNote (note, velocity);
+        return;
+    }
+
+    AbstractSessionView.prototype.onGridNote.call (this, note, velocity);
+};

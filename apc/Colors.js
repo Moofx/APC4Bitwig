@@ -86,6 +86,9 @@ function setModelSpecificColors (product)
             AbstractView.VIEW_SELECTED   = APC_MKII_COLOR_GREEN;
             AbstractView.VIEW_UNSELECTED = APC_MKII_COLOR_AMBER;
             AbstractView.VIEW_OFF        = APC_MKII_COLOR_BLACK;
+            AbstractView.KEY_WHITE       = APC_MKII_COLOR_AMBER_LO;
+            AbstractView.KEY_BLACK       = APC_MKII_COLOR_RED_HI;
+            AbstractView.KEY_SELECTED    = APC_MKII_COLOR_GREEN_HI;
 
             AbstractSessionView.CLIP_COLOR_IS_RECORDING        = { color: APC_MKII_COLOR_RED_HI,   blink: APC_MKII_COLOR_RED_HI,   fast: false };
             AbstractSessionView.CLIP_COLOR_IS_RECORDING_QUEUED = { color: APC_MKII_COLOR_RED_HI,   blink: APC_MKII_COLOR_RED_HI,   fast: true  };
@@ -123,6 +126,9 @@ function setModelSpecificColors (product)
             AbstractView.VIEW_SELECTED   = APC_COLOR_GREEN;
             AbstractView.VIEW_UNSELECTED = APC_COLOR_BLACK;
             AbstractView.VIEW_OFF        = APC_COLOR_BLACK;
+            AbstractView.KEY_WHITE       = APC_COLOR_GREEN;
+            AbstractView.KEY_BLACK       = APC_COLOR_RED;
+            AbstractView.KEY_SELECTED    = APC_COLOR_GREEN;
             
             AbstractSessionView.CLIP_COLOR_IS_RECORDING        = { color: APC_COLOR_RED,    blink: null,                  fast: false };
             AbstractSessionView.CLIP_COLOR_IS_RECORDING_QUEUED = { color: APC_COLOR_RED,    blink: APC_COLOR_RED_BLINK,   fast: false };

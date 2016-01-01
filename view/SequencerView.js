@@ -107,6 +107,12 @@ SequencerView.prototype.updateOctave = function (value)
 
 SequencerView.prototype.onGridNote = function (note, velocity)
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.onShiftGridNote (note, velocity);
+        return;
+    }
+
     if (!this.canSelectedTrackHoldNotes ())
         return;
     if (velocity == 0)
@@ -119,6 +125,12 @@ SequencerView.prototype.onGridNote = function (note, velocity)
 
 SequencerView.prototype.drawGrid = function ()
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.drawShiftGrid ();
+        return;
+    }
+
     var isKeyboardEnabled = this.canSelectedTrackHoldNotes ();
     var step = this.clip.getCurrentStep ();
     var hiStep = this.isInXRange (step) ? step % SequencerView.NUM_DISPLAY_COLS : -1;

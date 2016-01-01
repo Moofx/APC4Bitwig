@@ -73,6 +73,12 @@ PlayView.prototype.updateArrows = function ()
 
 PlayView.prototype.drawGrid = function ()
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.drawShiftGrid ();
+        return;
+    }
+
     var isKeyboardEnabled = this.canSelectedTrackHoldNotes ();
     var isRecording = this.model.hasRecordingState ();
 
@@ -118,6 +124,12 @@ PlayView.prototype.onScene = function (scene, event)
 
 PlayView.prototype.onGridNote = function (note, velocity)
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.onShiftGridNote (note, velocity);
+        return;
+    }
+
     if (!this.canSelectedTrackHoldNotes ())
         return;
 

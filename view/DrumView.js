@@ -63,6 +63,12 @@ DrumView.prototype.onSelect = function (event)
 
 DrumView.prototype.onGridNote = function (note, velocity)
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.onShiftGridNote (note, velocity);
+        return;
+    }
+
     if (!this.canSelectedTrackHoldNotes ())
         return;
 
@@ -156,6 +162,12 @@ DrumView.prototype.onOctaveUp = function (event)
 
 DrumView.prototype.drawGrid = function ()
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.drawShiftGrid ();
+        return;
+    }
+
     if (!this.canSelectedTrackHoldNotes ())
     {
         this.surface.pads.turnOff ();

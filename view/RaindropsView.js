@@ -60,6 +60,12 @@ RaindropsView.prototype.updateScale = function ()
 
 RaindropsView.prototype.onGridNote = function (note, velocity)
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.onShiftGridNote (note, velocity);
+        return;
+    }
+
     if (!this.canSelectedTrackHoldNotes ())
         return;
     if (velocity == 0)
@@ -144,6 +150,12 @@ RaindropsView.prototype.scrollLeft = function (event)
 
 RaindropsView.prototype.drawGrid = function ()
 {
+    if (this.surface.isShiftPressed ())
+    {
+        this.drawShiftGrid ();
+        return;
+    }
+
     if (!this.canSelectedTrackHoldNotes ())
     {
         this.surface.pads.turnOff ();
