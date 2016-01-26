@@ -9,8 +9,6 @@ function Controller (product)
 {
     Config.init ();
 
-    this.initButtonCache ();
-    
     var output = new MidiOutput ();
     var input = new APCMidiInput ();
     
@@ -76,8 +74,8 @@ Controller.prototype.flush = function ()
     var isShift = this.surface.isShiftPressed ();
 
     var t = this.model.getTransport ();
-    this.updateButton (APC_BUTTON_PLAY, t.isPlaying ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-    this.updateButton (APC_BUTTON_RECORD, t.isRecording ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_PLAY, t.isPlaying ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_RECORD, t.isRecording ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
 
     // Activator, Solo, Record Arm
     var tb = this.model.getCurrentTrackBank ();
@@ -87,55 +85,55 @@ Controller.prototype.flush = function ()
     for (var i = 0; i < 8; i++)
     {
         var track = tb.getTrack (i);
-        this.updateChannelButton (APC_BUTTON_TRACK_SELECTION, i, i == selIndex ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.updateChannelButton (APC_BUTTON_SOLO, i, track.exists && (isShift ? track.autoMonitor : track.solo) ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.updateChannelButton (APC_BUTTON_ACTIVATOR, i, track.exists && (isShift ? track.monitor : !track.mute) ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButtonEx (APC_BUTTON_TRACK_SELECTION, i, i == selIndex ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButtonEx (APC_BUTTON_SOLO, i, track.exists && (isShift ? track.autoMonitor : track.solo) ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButtonEx (APC_BUTTON_ACTIVATOR, i, track.exists && (isShift ? track.monitor : !track.mute) ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
 
         if (isMkII)
         {
-            this.updateChannelButton (APC_BUTTON_A_B, i, track.exists && track.crossfadeMode != 'AB' ? (track.crossfadeMode == 'A' ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_BLINK) : APC_BUTTON_STATE_OFF);
-            this.updateChannelButton (APC_BUTTON_RECORD_ARM, i, track.exists && track.recarm ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+            this.surface.updateButtonEx (APC_BUTTON_A_B, i, track.exists && track.crossfadeMode != 'AB' ? (track.crossfadeMode == 'A' ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_BLINK) : APC_BUTTON_STATE_OFF);
+            this.surface.updateButtonEx (APC_BUTTON_RECORD_ARM, i, track.exists && track.recarm ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
         }
         else
         {
             if (isShift)
-                this.updateChannelButton (APC_BUTTON_RECORD_ARM, i, track.exists && track.crossfadeMode != 'AB' ? (track.crossfadeMode == 'A' ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_BLINK) : APC_BUTTON_STATE_OFF);
+                this.surface.updateButtonEx (APC_BUTTON_RECORD_ARM, i, track.exists && track.crossfadeMode != 'AB' ? (track.crossfadeMode == 'A' ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_BLINK) : APC_BUTTON_STATE_OFF);
             else
-                this.updateChannelButton (APC_BUTTON_RECORD_ARM, i, track.exists && track.recarm ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+                this.surface.updateButtonEx (APC_BUTTON_RECORD_ARM, i, track.exists && track.recarm ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
         }
     }
-    this.updateButton (APC_BUTTON_MASTER, this.model.getMasterTrack ().isSelected () ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_MASTER, this.model.getMasterTrack ().isSelected () ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
     
     var device = this.model.getCursorDevice ();
 
     if (isMkII)
     {
-        this.updateButton (APC_BUTTON_SESSION, t.isLauncherOverdub ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_SEND_C, t.isClickOn ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SESSION, t.isLauncherOverdub ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SEND_C, t.isClickOn ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
         
-        this.updateButton (APC_BUTTON_DETAIL_VIEW, device.getSelectedDevice ().enabled ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_REC_QUANT, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_MIDI_OVERDUB, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_METRONOME, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DETAIL_VIEW, device.getSelectedDevice ().enabled ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_REC_QUANT, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_MIDI_OVERDUB, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_METRONOME, APC_BUTTON_STATE_OFF);
         
-        this.updateButton (APC_BUTTON_CLIP_TRACK, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_DEVICE_ON_OFF, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_DEVICE_LEFT, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_DEVICE_RIGHT, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_CLIP_TRACK, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DEVICE_ON_OFF, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DEVICE_LEFT, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DEVICE_RIGHT, APC_BUTTON_STATE_OFF);
         
-        this.updateButton (APC_BUTTON_BANK, this.model.isEffectTrackBankActive () ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_BANK, this.model.isEffectTrackBankActive () ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
     }
     else
     {
-        this.updateButton (APC_BUTTON_DETAIL_VIEW, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_REC_QUANT, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_MIDI_OVERDUB, t.isLauncherOverdub ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_METRONOME, t.isClickOn ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DETAIL_VIEW, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_REC_QUANT, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_MIDI_OVERDUB, t.isLauncherOverdub ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_METRONOME, t.isClickOn ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
         
-        this.updateButton (APC_BUTTON_CLIP_TRACK, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_DEVICE_ON_OFF, device.getSelectedDevice ().enabled ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_DEVICE_LEFT, APC_BUTTON_STATE_OFF);
-        this.updateButton (APC_BUTTON_DEVICE_RIGHT, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_CLIP_TRACK, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DEVICE_ON_OFF, device.getSelectedDevice ().enabled ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DEVICE_LEFT, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_DEVICE_RIGHT, APC_BUTTON_STATE_OFF);
     }
     
     this.updateDeviceKnobs ();
@@ -146,16 +144,16 @@ Controller.prototype.updateMode = function (mode)
     this.updateIndication (mode);
     if (this.surface.isMkII ())
     {
-        this.surface.setButton (APC_BUTTON_PAN, mode == MODE_PAN ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.surface.setButton (APC_BUTTON_SEND_A, mode >= MODE_SEND1 && mode <= MODE_SEND8 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.surface.setButton (APC_BUTTON_SEND_B, mode == MODE_MACRO ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_PAN, mode == MODE_PAN ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SEND_A, mode >= MODE_SEND1 && mode <= MODE_SEND8 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SEND_B, mode == MODE_MACRO ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
     }
     else
     {
-        this.surface.setButton (APC_BUTTON_PAN, mode == MODE_PAN || mode == MODE_MACRO ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.surface.setButton (APC_BUTTON_SEND_A, mode == MODE_SEND1 || mode == MODE_SEND4 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.surface.setButton (APC_BUTTON_SEND_B, mode == MODE_SEND2 || mode == MODE_SEND5 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
-        this.surface.setButton (APC_BUTTON_SEND_C, mode == MODE_SEND3 || mode == MODE_SEND6 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_PAN, mode == MODE_PAN || mode == MODE_MACRO ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SEND_A, mode == MODE_SEND1 || mode == MODE_SEND4 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SEND_B, mode == MODE_SEND2 || mode == MODE_SEND5 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SEND_C, mode == MODE_SEND3 || mode == MODE_SEND6 ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
     }        
 };
 
@@ -213,54 +211,4 @@ Controller.prototype.handleTrackChange = function (index, isSelected)
 
     if (this.surface.isActiveView (VIEW_PLAY))
         this.surface.getActiveView ().updateNoteMapping ();
-};
-
-Controller.prototype.initButtonCache = function ()
-{
-    this.buttonCache = [];
-    this.buttonCache[APC_BUTTON_PLAY] = -1;
-    this.buttonCache[APC_BUTTON_RECORD] = -1;
-    this.buttonCache[APC_BUTTON_TRACK_SELECTION] = new Array ();
-    this.buttonCache[APC_BUTTON_SOLO] = new Array ();
-    this.buttonCache[APC_BUTTON_ACTIVATOR] = new Array ();
-    this.buttonCache[APC_BUTTON_A_B] = new Array ();
-    this.buttonCache[APC_BUTTON_RECORD_ARM] = new Array ();
-    for (var i = 0; i < 8; i++)
-    {
-        this.buttonCache[APC_BUTTON_TRACK_SELECTION][i] = -1;
-        this.buttonCache[APC_BUTTON_SOLO][i] = -1;
-        this.buttonCache[APC_BUTTON_ACTIVATOR][i] = -1;
-        this.buttonCache[APC_BUTTON_A_B][i] = -1;
-        this.buttonCache[APC_BUTTON_RECORD_ARM][i] = -1;
-    }
-    this.buttonCache[APC_BUTTON_MASTER] = -1;
-    this.buttonCache[APC_BUTTON_DETAIL_VIEW] = -1;
-    this.buttonCache[APC_BUTTON_REC_QUANT] = -1;
-    this.buttonCache[APC_BUTTON_MIDI_OVERDUB] = -1;
-    this.buttonCache[APC_BUTTON_METRONOME] = -1;
-    this.buttonCache[APC_BUTTON_CLIP_TRACK] = -1;
-    this.buttonCache[APC_BUTTON_DEVICE_ON_OFF] = -1;
-    this.buttonCache[APC_BUTTON_DEVICE_LEFT] = -1;
-    this.buttonCache[APC_BUTTON_DEVICE_RIGHT] = -1;
-
-    // Only MkII
-    this.buttonCache[APC_BUTTON_SESSION] = -1;
-    this.buttonCache[APC_BUTTON_SEND_C] = -1;
-    this.buttonCache[APC_BUTTON_BANK] = -1;
-};
-
-Controller.prototype.updateChannelButton = function (button, index, value)
-{
-    if (this.buttonCache[button][index] == value)
-        return;
-    this.surface.setButtonEx (button, index, value);
-    this.buttonCache[button][index] = value;
-};
-
-Controller.prototype.updateButton = function (button, value)
-{
-    if (this.buttonCache[button] == value)
-        return;
-    this.surface.setButton (button, value);
-    this.buttonCache[button] = value;
 };

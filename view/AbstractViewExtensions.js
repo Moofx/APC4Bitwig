@@ -35,11 +35,11 @@ AbstractView.prototype.usesButton = function (buttonID)
 
 AbstractView.prototype.drawSceneButtons = function ()
 {
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_1, this.surface.isActiveView (VIEW_SESSION) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_2, this.surface.isActiveView (VIEW_PLAY) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_3, this.surface.isActiveView (VIEW_DRUM) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_4, this.surface.isActiveView (VIEW_SEQUENCER) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_5, this.surface.isActiveView (VIEW_RAINDROPS) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, this.surface.isActiveView (VIEW_SESSION) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, this.surface.isActiveView (VIEW_PLAY) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_3, this.surface.isActiveView (VIEW_DRUM) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_4, this.surface.isActiveView (VIEW_SEQUENCER) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_5, this.surface.isActiveView (VIEW_RAINDROPS) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
 };
 
 AbstractView.prototype.drawShiftGrid = function ()
@@ -579,10 +579,10 @@ AbstractView.prototype.onClipStop = function (channel, event)
             this.model.getCurrentTrackBank ().returnToArrangement (channel);
         else
             this.model.getCurrentTrackBank ().stop (channel);
-        this.surface.setButtonEx (APC_BUTTON_CLIP_STOP, channel, APC_BUTTON_STATE_ON);
+        this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, channel, APC_BUTTON_STATE_ON);
     }
     else if (event.isUp ())
-        this.surface.setButtonEx (APC_BUTTON_CLIP_STOP, channel, APC_BUTTON_STATE_OFF);
+        this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, channel, APC_BUTTON_STATE_OFF);
 };
 
 //--------------------------------------

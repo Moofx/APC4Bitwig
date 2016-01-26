@@ -69,12 +69,12 @@ AbstractSequencerView.prototype.drawSceneButtons = function ()
     if (!isKeyboardEnabled)
     {
         for (var i = 0; i < 8; i++)
-            this.surface.setButtonEx (APC_BUTTON_CLIP_STOP, i, AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);
+            this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, i, AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);
         return;
     }
 
     for (var i = 0; i < 8; i++)
-        this.surface.setButtonEx (APC_BUTTON_CLIP_STOP, i, i == this.selectedIndex ? AbstractSequencerView.COLOR_SELECTED_RESOLUTION_ON : AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);
+        this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, i, i == this.selectedIndex ? AbstractSequencerView.COLOR_SELECTED_RESOLUTION_ON : AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);
 };
 
 AbstractSequencerView.prototype.isInXRange = function (x)

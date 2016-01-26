@@ -13,10 +13,10 @@ SessionView.prototype.onScene = function (scene, event)
     if (event.isDown ())
     {
         this.model.getCurrentTrackBank ().launchScene (scene);
-        this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_1 + scene, APC_BUTTON_STATE_ON);
+        this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1 + scene, APC_BUTTON_STATE_ON);
     }
     else if (event.isUp ())
-        this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_1 + scene, APC_BUTTON_STATE_OFF);
+        this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1 + scene, APC_BUTTON_STATE_OFF);
 };
 
 SessionView.prototype.drawSceneButtons = function ()
@@ -26,11 +26,11 @@ SessionView.prototype.drawSceneButtons = function ()
         AbstractView.prototype.drawSceneButtons.call (this);
         return;
     }
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_OFF);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_2, APC_BUTTON_STATE_OFF);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_3, APC_BUTTON_STATE_OFF);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_4, APC_BUTTON_STATE_OFF);
-    this.surface.setButton (APC_BUTTON_SCENE_LAUNCH_5, APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_3, APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_4, APC_BUTTON_STATE_OFF);
+    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_5, APC_BUTTON_STATE_OFF);
 };
 
 SessionView.prototype.drawGrid = function ()
