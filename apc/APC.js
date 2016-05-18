@@ -304,7 +304,10 @@ APC.prototype.handleEvent = function (note, value, channel)
             break;
 
         case APC_BUTTON_SESSION:      // mkII
-            view.onMidiOverdub (event);
+            if (this.isShiftPressed ())
+                view.onWriteClipAutomation (event);
+            else
+                view.onMidiOverdub (event);
             break;
             
         ///////////////////////

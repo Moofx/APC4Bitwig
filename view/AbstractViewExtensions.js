@@ -525,6 +525,12 @@ AbstractView.prototype.onMidiOverdub = function (event)
         this.model.getTransport ().toggleLauncherOverdub ();
 };
 
+AbstractView.prototype.onWriteClipAutomation = function (event)
+{
+    if (event.isDown ())
+        this.model.getTransport ().toggleWriteClipLauncherAutomation ();
+};
+
 AbstractView.prototype.onQuantize = function (event)
 {
     if (event.isDown ())
