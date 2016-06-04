@@ -657,9 +657,3 @@ AbstractView.prototype.startCheckKnobMovement = function ()
         this.checkKnobMovement ();
     }), [], 100);
 };
-
-AbstractView.prototype.canSelectedTrackHoldNotes = function ()
-{
-    var t = this.model.getCurrentTrackBank ().getSelectedTrack ();
-    return t != null && t.canHoldNotes;
-};
