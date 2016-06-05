@@ -64,7 +64,7 @@ AbstractSequencerView.prototype.onClipStop = function (channel, event)
 
 AbstractSequencerView.prototype.drawSceneButtons = function ()
 {
-    if (this.canSelectedTrackHoldNotes ())
+    if (this.model.canSelectedTrackHoldNotes ())
     {
         for (var i = 0; i < 8; i++)
             this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, i, i == this.selectedIndex ? AbstractSequencerView.COLOR_SELECTED_RESOLUTION_ON : AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);

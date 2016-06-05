@@ -55,7 +55,7 @@ RaindropsView.prototype.updateNoteMapping = function ()
 
 RaindropsView.prototype.updateScale = function ()
 {
-    this.noteMap = this.canSelectedTrackHoldNotes () ? this.scales.getSequencerMatrix (RaindropsView.NUM_DISPLAY_ROWS, this.offsetY) : this.scales.getEmptyMatrix ();
+    this.noteMap = this.model.canSelectedTrackHoldNotes () ? this.scales.getSequencerMatrix (RaindropsView.NUM_DISPLAY_ROWS, this.offsetY) : this.scales.getEmptyMatrix ();
 };
 
 RaindropsView.prototype.onGridNote = function (note, velocity)
@@ -66,7 +66,7 @@ RaindropsView.prototype.onGridNote = function (note, velocity)
         return;
     }
 
-    if (!this.canSelectedTrackHoldNotes ())
+    if (!this.model.canSelectedTrackHoldNotes ())
         return;
     if (velocity == 0)
         return;
@@ -156,7 +156,7 @@ RaindropsView.prototype.drawGrid = function ()
         return;
     }
 
-    if (!this.canSelectedTrackHoldNotes ())
+    if (!this.model.canSelectedTrackHoldNotes ())
     {
         this.surface.pads.turnOff ();
         return;
