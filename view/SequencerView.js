@@ -130,6 +130,9 @@ SequencerView.prototype.drawGrid = function ()
         this.drawShiftGrid ();
         return;
     }
+    
+    var tb = this.model.getCurrentTrackBank ();
+    var selectedTrack = tb.getSelectedTrack ();
 
     var isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
     var step = this.clip.getCurrentStep ();
@@ -142,7 +145,7 @@ SequencerView.prototype.drawGrid = function ()
             var isSet = this.clip.getStep (x, row);
             var hilite = x == hiStep;
             if (isKeyboardEnabled)
-                this.surface.pads.lightEx (x, 4 - y, isSet ? (hilite ? AbstractSequencerView.COLOR_STEP_HILITE_CONTENT : AbstractSequencerView.COLOR_CONTENT) : hilite ? AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT : this.scales.getColor (this.noteMap, y), null, false);
+                this.surface.pads.lightEx (x, 4 - y, isSet ? (hilite ? AbstractSequencerView.COLOR_STEP_HILITE_CONTENT : AbstractSequencerView.COLOR_CONTENT) : hilite ? AbstractSequencerView.COLOR_STEP_HILITE_NO_CONTENT : this.getColor (y, selectedTrack), null, false);
             else
                 this.surface.pads.lightEx (x, 4 - y, AbstractSequencerView.COLOR_NO_CONTENT, null, false);
         }

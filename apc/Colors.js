@@ -14,7 +14,8 @@ var APC_COLOR_YELLOW_BLINK = 6;   // yellow blink,
 // APC40mkII Colors for 5x8 clip matrix
 var APC_MKII_COLOR_BLACK            = 0;
 var APC_MKII_COLOR_GREY_LO          = 1;
-var APC_MKII_COLOR_GREY_MD          = 2;
+var APC_MKII_COLOR_GREY_MD          = 103;
+var APC_MKII_COLOR_GREY_LT          = 2;
 var APC_MKII_COLOR_WHITE            = 3;
 var APC_MKII_COLOR_ROSE             = 4;
 var APC_MKII_COLOR_RED_HI           = 5;
@@ -89,6 +90,10 @@ function setModelSpecificColors (product)
             AbstractView.KEY_WHITE       = APC_MKII_COLOR_AMBER_LO;
             AbstractView.KEY_BLACK       = APC_MKII_COLOR_RED_HI;
             AbstractView.KEY_SELECTED    = APC_MKII_COLOR_GREEN_HI;
+
+            AbstractTrackBankProxy.COLORS[1][3] = APC_MKII_COLOR_GREY_MD;
+            AbstractTrackBankProxy.COLORS[2][3] = APC_MKII_COLOR_GREY_LT;
+            AbstractTrackBankProxy.COLORS[8][3] = 81;
 
             AbstractSessionView.CLIP_COLOR_IS_RECORDING        = { color: APC_MKII_COLOR_RED_HI,   blink: APC_MKII_COLOR_RED_HI,   fast: false };
             AbstractSessionView.CLIP_COLOR_IS_RECORDING_QUEUED = { color: APC_MKII_COLOR_RED_HI,   blink: APC_MKII_COLOR_RED_HI,   fast: true  };

@@ -82,11 +82,14 @@ PlayView.prototype.drawGrid = function ()
     var isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
     var isRecording = this.model.hasRecordingState ();
 
+    var tb = this.model.getCurrentTrackBank ();
+    var selectedTrack = tb.getSelectedTrack ();
+
     for (var i = 36; i < 76; i++)
     {
         this.surface.pads.light (i, isKeyboardEnabled ? (this.pressedKeys[i] > 0 ?
             (isRecording ? AbstractSessionView.CLIP_COLOR_IS_RECORDING.color : AbstractSessionView.CLIP_COLOR_IS_PLAYING.color) :
-            this.scales.getColor (this.noteMap, i)) : APC_COLOR_BLACK, null, false);
+                this.getColor (i, selectedTrack)) : APC_COLOR_BLACK, null, false);
     }
 };
 

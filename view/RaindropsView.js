@@ -165,6 +165,9 @@ RaindropsView.prototype.drawGrid = function ()
     if (this.ongoingResolutionChange)
         return;
 
+    var tb = this.model.getCurrentTrackBank ();
+    var selectedTrack = tb.getSelectedTrack ();
+
     var length = this.clip.getLoopLength () / this.resolutions[this.selectedIndex];
     var step = this.clip.getCurrentStep ();
     
@@ -178,7 +181,7 @@ RaindropsView.prototype.drawGrid = function ()
         
         for (var y = 0; y < RaindropsView.NUM_DISPLAY_ROWS; y++)
         {
-            var color = y == 0 ? this.scales.getColor (this.noteMap, x) : AbstractSequencerView.COLOR_NO_CONTENT;
+            var color = y == 0 ? this.getColor (x, selectedTrack) : AbstractSequencerView.COLOR_NO_CONTENT;
             if (isOn)
             {
                 if (y == distance)
