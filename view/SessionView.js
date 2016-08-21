@@ -33,6 +33,11 @@ SessionView.prototype.drawSceneButtons = function ()
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_5, APC_BUTTON_STATE_OFF);
 };
 
+SessionView.prototype.doSelectClipOnLaunch = function ()
+{
+    return Config.selectClipOnLaunch;
+};
+
 SessionView.prototype.drawGrid = function ()
 {
     if (this.surface.isShiftPressed ())

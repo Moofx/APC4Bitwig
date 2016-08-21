@@ -94,18 +94,7 @@ AbstractView.prototype.onPlay = function (event)
     if (this.surface.isShiftPressed ())
         this.model.getTransport ().toggleLoop ();
     else
-    {
-        if (!this.restartFlag)
-        {
-            this.model.getTransport ().play ();
-            this.doubleClickTest ();
-        }
-        else
-        {
-            this.model.getTransport ().stopAndRewind ();
-            this.restartFlag = false;
-        }
-    }
+        this.handlePlayOptions ();
 };
 
 AbstractView.prototype.onStop = function (event)
