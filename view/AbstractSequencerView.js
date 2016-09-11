@@ -29,9 +29,7 @@ AbstractSequencerView.prototype = new AbstractView ();
 AbstractSequencerView.prototype.onActivate = function ()
 {
     AbstractView.prototype.onActivate.call (this);
-
     this.model.getCurrentTrackBank ().setIndication (false);
-    this.drawSceneButtons ();
 };
 
 AbstractSequencerView.prototype.scrollLeft = function (event)
@@ -58,11 +56,10 @@ AbstractSequencerView.prototype.onClipStop = function (channel, event)
         return;
     this.selectedIndex = channel;
     this.clip.setStepLength (this.resolutions[this.selectedIndex]);
-    this.drawSceneButtons ();
     displayNotification (this.resolutionsStr[this.selectedIndex]);
 };
 
-AbstractSequencerView.prototype.drawSceneButtons = function ()
+AbstractSequencerView.prototype.updateSceneButtons = function ()
 {
     if (this.model.canSelectedTrackHoldNotes ())
     {

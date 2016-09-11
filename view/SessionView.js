@@ -19,11 +19,11 @@ SessionView.prototype.onScene = function (scene, event)
         this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1 + scene, APC_BUTTON_STATE_OFF);
 };
 
-SessionView.prototype.drawSceneButtons = function ()
+SessionView.prototype.updateSceneButtons = function ()
 {
     if (this.surface.isShiftPressed ())
     {
-        AbstractView.prototype.drawSceneButtons.call (this);
+        AbstractView.prototype.updateSceneButtons.call (this);
         return;
     }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_OFF);

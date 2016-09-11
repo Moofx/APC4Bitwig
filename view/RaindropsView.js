@@ -29,15 +29,13 @@ RaindropsView.prototype.updateArrowStates = function ()
     this.canScrollDown = false;
     this.canScrollLeft = this.offsetY - RaindropsView.NUM_OCTAVE >= 0;
     this.canScrollRight = this.offsetY + RaindropsView.NUM_OCTAVE <= this.clip.getRowSize () - RaindropsView.NUM_OCTAVE;
-
-    this.drawSceneButtons ();
 };
 
-RaindropsView.prototype.drawSceneButtons = function ()
+RaindropsView.prototype.updateSceneButtons = function ()
 {
     if (this.surface.isShiftPressed ())
     {
-        AbstractView.prototype.drawSceneButtons.call (this);
+        AbstractView.prototype.updateSceneButtons.call (this);
         return;
     }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_ON);

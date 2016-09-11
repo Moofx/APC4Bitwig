@@ -21,11 +21,11 @@ SequencerView.prototype.onActivate = function ()
     AbstractSequencerView.prototype.onActivate.call (this);
 };
 
-SequencerView.prototype.drawSceneButtons = function ()
+SequencerView.prototype.updateSceneButtons = function ()
 {
     if (this.surface.isShiftPressed ())
     {
-        AbstractView.prototype.drawSceneButtons.call (this);
+        AbstractView.prototype.updateSceneButtons.call (this);
         return;
     }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_ON);
@@ -42,7 +42,6 @@ SequencerView.prototype.updateArrows = function ()
     this.canScrollLeft = this.offsetX > 0;
     this.canScrollRight = true; // TODO We do not know the number of steps
     AbstractSequencerView.prototype.updateArrows.call (this);
-    this.drawSceneButtons ();
 };
 
 SequencerView.prototype.updateNoteMapping = function ()

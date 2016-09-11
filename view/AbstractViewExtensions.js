@@ -33,7 +33,12 @@ AbstractView.prototype.usesButton = function (buttonID)
     return true;
 };
 
-AbstractView.prototype.drawSceneButtons = function ()
+AbstractView.prototype.updateArrows = function ()
+{
+    this.updateSceneButtons ();
+};
+
+AbstractView.prototype.updateSceneButtons = function ()
 {
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, this.surface.isActiveView (VIEW_SESSION) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, this.surface.isActiveView (VIEW_PLAY) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
@@ -158,10 +163,7 @@ AbstractView.prototype.onCueLevel = function (value)
     this.model.getTransport ().changePosition (value < 65, this.surface.isShiftPressed ());
 };
 
-AbstractView.prototype.onShift = function (event)
-{
-    this.drawSceneButtons ();
-};
+AbstractView.prototype.onShift = function (event) {};
 
 AbstractView.prototype.onShiftScene = function (index, event)
 {
