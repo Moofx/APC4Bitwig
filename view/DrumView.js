@@ -7,7 +7,7 @@ DrumView.DRUM_START_KEY = 36;
 
 function DrumView (model)
 {
-    AbstractSequencerView.call (this, model, 128, DrumView.NUM_DISPLAY_COLS);
+    BaseSequencerView.call (this, model, 128, DrumView.NUM_DISPLAY_COLS);
     this.offsetY = DrumView.DRUM_START_KEY;
     this.canScrollUp = false;
     this.canScrollDown = false;
@@ -28,13 +28,13 @@ function DrumView (model)
         this.clearPressedKeys ();
     }));
 }
-DrumView.prototype = new AbstractSequencerView ();
+DrumView.prototype = new BaseSequencerView ();
 
 DrumView.prototype.updateSceneButtons = function ()
 {
     if (this.surface.isShiftPressed ())
     {
-        AbstractView.prototype.updateSceneButtons.call (this);
+        AbstractSequencerView.prototype.updateSceneButtons.call (this);
         return;
     }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_OFF);

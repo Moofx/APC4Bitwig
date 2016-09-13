@@ -2,10 +2,6 @@
 // (c) 2014-2016
 // Licensed under LGPLv3 - http://www.gnu.org/licenses/lgpl-3.0.txt
 
-// Note: Overwrite these with your specific controller colors
-AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF = 0;
-AbstractSequencerView.COLOR_SELECTED_RESOLUTION_ON  = 1;
-
 function AbstractSequencerView (model, rows, cols)
 {
     if (!model) // Called on first prototype creation
@@ -13,9 +9,9 @@ function AbstractSequencerView (model, rows, cols)
 
     AbstractView.call (this, model);
 
-    this.resolutions = [ 1, 2/3, 1/2, 1/3, 1/4, 1/6, 1/8, 1/12 ];
+    this.resolutions    = [ 1, 2/3, 1/2, 1/3, 1/4, 1/6, 1/8, 1/12 ];
     this.resolutionsStr = [ "1/4", "1/4t", "1/8", "1/8t", "1/16", "1/16t", "1/32", "1/32t" ];
-    this.selectedIndex = 4;
+    this.selectedIndex  = 4;
     this.scales = this.model.getScales ();
 
     this.offsetX = 0;
@@ -25,12 +21,6 @@ function AbstractSequencerView (model, rows, cols)
     this.clip.setStepLength (this.resolutions[this.selectedIndex]);
 }
 AbstractSequencerView.prototype = new AbstractView ();
-
-AbstractSequencerView.prototype.onActivate = function ()
-{
-    AbstractView.prototype.onActivate.call (this);
-    this.model.getCurrentTrackBank ().setIndication (false);
-};
 
 AbstractSequencerView.prototype.scrollLeft = function (event)
 {
@@ -50,27 +40,12 @@ AbstractSequencerView.prototype.scrollRight = function (event)
     this.clip.scrollStepsPageForward ();
 };
 
-AbstractSequencerView.prototype.onClipStop = function (channel, event)
+AbstractSequencerView.prototype.onScene = function (index, event)
 {
-    if (!event.isDown ())
+    if (!event.isDown () || !this.model.canSelectedTrackHoldNotes ())
         return;
-    this.selectedIndex = channel;
+    this.selectedIndex = 7 - index;
     this.clip.setStepLength (this.resolutions[this.selectedIndex]);
-    displayNotification (this.resolutionsStr[this.selectedIndex]);
-};
-
-AbstractSequencerView.prototype.updateSceneButtons = function ()
-{
-    if (this.model.canSelectedTrackHoldNotes ())
-    {
-        for (var i = 0; i < 8; i++)
-            this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, i, i == this.selectedIndex ? AbstractSequencerView.COLOR_SELECTED_RESOLUTION_ON : AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);
-    }
-    else
-    {
-        for (var i = 0; i < 8; i++)
-            this.surface.updateButtonEx (APC_BUTTON_CLIP_STOP, i, AbstractSequencerView.COLOR_SELECTED_RESOLUTION_OFF);
-    }
 };
 
 AbstractSequencerView.prototype.isInXRange = function (x)

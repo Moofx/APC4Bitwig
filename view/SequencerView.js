@@ -9,16 +9,16 @@ SequencerView.START_KEY        = 36;
 
 function SequencerView (model)
 {
-    AbstractSequencerView.call (this, model, 128, SequencerView.NUM_DISPLAY_COLS);
+    BaseSequencerView.call (this, model, 128, SequencerView.NUM_DISPLAY_COLS);
     this.offsetY = SequencerView.START_KEY;
     this.clip.scrollTo (0, SequencerView.START_KEY);
 }
-SequencerView.prototype = new AbstractSequencerView ();
+SequencerView.prototype = new BaseSequencerView ();
 
 SequencerView.prototype.onActivate = function ()
 {
     this.updateScale ();
-    AbstractSequencerView.prototype.onActivate.call (this);
+    BaseSequencerView.prototype.onActivate.call (this);
 };
 
 SequencerView.prototype.updateSceneButtons = function ()
@@ -41,12 +41,12 @@ SequencerView.prototype.updateArrows = function ()
     this.canScrollDown = this.offsetY - SequencerView.NUM_OCTAVE >= 0;
     this.canScrollLeft = this.offsetX > 0;
     this.canScrollRight = true; // TODO We do not know the number of steps
-    AbstractSequencerView.prototype.updateArrows.call (this);
+    BaseSequencerView.prototype.updateArrows.call (this);
 };
 
 SequencerView.prototype.updateNoteMapping = function ()
 {
-    AbstractSequencerView.prototype.updateNoteMapping.call (this);
+    BaseSequencerView.prototype.updateNoteMapping.call (this);
     this.updateScale ();
 };
 
