@@ -61,6 +61,7 @@ function Controller (product)
     this.surface.addView (VIEW_SEQUENCER, new SequencerView (this.model));
     this.surface.addView (VIEW_DRUM, new DrumView (this.model));
     this.surface.addView (VIEW_RAINDROPS, new RaindropsView (this.model));
+    this.surface.addView (VIEW_SHIFT, new ShiftView (this.model));
     
     this.surface.setActiveView (VIEW_SESSION);
     this.surface.setPendingMode (MODE_PAN);

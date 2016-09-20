@@ -9,25 +9,20 @@ SequencerView.START_KEY        = 36;
 
 function SequencerView (model)
 {
-    BaseSequencerView.call (this, model, 128, SequencerView.NUM_DISPLAY_COLS);
+    AbstractSequencerView.call (this, model, 128, SequencerView.NUM_DISPLAY_COLS);
     this.offsetY = SequencerView.START_KEY;
     this.clip.scrollTo (0, SequencerView.START_KEY);
 }
-SequencerView.prototype = new BaseSequencerView ();
+SequencerView.prototype = new AbstractSequencerView ();
 
 SequencerView.prototype.onActivate = function ()
 {
     this.updateScale ();
-    BaseSequencerView.prototype.onActivate.call (this);
+    AbstractSequencerView.prototype.onActivate.call (this);
 };
 
 SequencerView.prototype.updateSceneButtons = function ()
 {
-    if (this.surface.isShiftPressed ())
-    {
-        AbstractView.prototype.updateSceneButtons.call (this);
-        return;
-    }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_ON);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, APC_BUTTON_STATE_ON);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_3, APC_BUTTON_STATE_OFF);
@@ -41,12 +36,12 @@ SequencerView.prototype.updateArrows = function ()
     this.canScrollDown = this.offsetY - SequencerView.NUM_OCTAVE >= 0;
     this.canScrollLeft = this.offsetX > 0;
     this.canScrollRight = true; // TODO We do not know the number of steps
-    BaseSequencerView.prototype.updateArrows.call (this);
+    AbstractSequencerView.prototype.updateArrows.call (this);
 };
 
 SequencerView.prototype.updateNoteMapping = function ()
 {
-    BaseSequencerView.prototype.updateNoteMapping.call (this);
+    AbstractSequencerView.prototype.updateNoteMapping.call (this);
     this.updateScale ();
 };
 
@@ -106,12 +101,6 @@ SequencerView.prototype.updateOctave = function (value)
 
 SequencerView.prototype.onGridNote = function (note, velocity)
 {
-    if (this.surface.isShiftPressed ())
-    {
-        this.onShiftGridNote (note, velocity);
-        return;
-    }
-
     if (!this.model.canSelectedTrackHoldNotes ())
         return;
     if (velocity == 0)
@@ -124,12 +113,6 @@ SequencerView.prototype.onGridNote = function (note, velocity)
 
 SequencerView.prototype.drawGrid = function ()
 {
-    if (this.surface.isShiftPressed ())
-    {
-        this.drawShiftGrid ();
-        return;
-    }
-    
     var tb = this.model.getCurrentTrackBank ();
     var selectedTrack = tb.getSelectedTrack ();
 

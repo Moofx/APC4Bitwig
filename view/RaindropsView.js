@@ -9,18 +9,18 @@ RaindropsView.START_KEY        = 36;
 
 function RaindropsView (model)
 {
-    BaseSequencerView.call (this, model, 128, 32 * 16 /* Biggest number in Fixed Length */);
+    AbstractSequencerView.call (this, model, 128, 32 * 16 /* Biggest number in Fixed Length */);
     this.offsetY = RaindropsView.START_KEY;
     this.clip.scrollTo (0, RaindropsView.START_KEY);
     
     this.ongoingResolutionChange = false;
 }
-RaindropsView.prototype = new BaseSequencerView ();
+RaindropsView.prototype = new AbstractSequencerView ();
 
 RaindropsView.prototype.onActivate = function ()
 {
     this.updateScale ();
-    BaseSequencerView.prototype.onActivate.call (this);
+    AbstractSequencerView.prototype.onActivate.call (this);
 };
 
 RaindropsView.prototype.updateArrowStates = function ()
@@ -33,11 +33,6 @@ RaindropsView.prototype.updateArrowStates = function ()
 
 RaindropsView.prototype.updateSceneButtons = function ()
 {
-    if (this.surface.isShiftPressed ())
-    {
-        AbstractView.prototype.updateSceneButtons.call (this);
-        return;
-    }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_ON);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, APC_BUTTON_STATE_ON);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_3, APC_BUTTON_STATE_OFF);
@@ -47,7 +42,7 @@ RaindropsView.prototype.updateSceneButtons = function ()
 
 RaindropsView.prototype.updateNoteMapping = function ()
 {
-    BaseSequencerView.prototype.updateNoteMapping.call (this);
+    AbstractSequencerView.prototype.updateNoteMapping.call (this);
     this.updateScale ();
 };
 
@@ -58,12 +53,6 @@ RaindropsView.prototype.updateScale = function ()
 
 RaindropsView.prototype.onGridNote = function (note, velocity)
 {
-    if (this.surface.isShiftPressed ())
-    {
-        this.onShiftGridNote (note, velocity);
-        return;
-    }
-
     if (!this.model.canSelectedTrackHoldNotes ())
         return;
     if (velocity == 0)
@@ -86,10 +75,11 @@ RaindropsView.prototype.onGridNote = function (note, velocity)
 
 RaindropsView.prototype.onScene = function (index, event)
 {
-    this.ongoingResolutionChange = true;
-
     if (!event.isDown ())
         return;
+
+    this.ongoingResolutionChange = true;
+
     switch (index)
     {
         case 0:
@@ -148,12 +138,6 @@ RaindropsView.prototype.scrollLeft = function (event)
 
 RaindropsView.prototype.drawGrid = function ()
 {
-    if (this.surface.isShiftPressed ())
-    {
-        this.drawShiftGrid ();
-        return;
-    }
-
     if (!this.model.canSelectedTrackHoldNotes ())
     {
         this.surface.pads.turnOff ();
@@ -163,11 +147,13 @@ RaindropsView.prototype.drawGrid = function ()
     if (this.ongoingResolutionChange)
         return;
 
+
     var tb = this.model.getCurrentTrackBank ();
     var selectedTrack = tb.getSelectedTrack ();
 
     var length = this.clip.getLoopLength () / this.resolutions[this.selectedIndex];
     var step = this.clip.getCurrentStep ();
+    
     
     for (var x = 0; x < RaindropsView.NUM_DISPLAY_COLS; x++)
     {

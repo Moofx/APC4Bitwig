@@ -21,11 +21,6 @@ SessionView.prototype.onScene = function (scene, event)
 
 SessionView.prototype.updateSceneButtons = function ()
 {
-    if (this.surface.isShiftPressed ())
-    {
-        AbstractView.prototype.updateSceneButtons.call (this);
-        return;
-    }
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, APC_BUTTON_STATE_OFF);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, APC_BUTTON_STATE_OFF);
     this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_3, APC_BUTTON_STATE_OFF);
@@ -36,26 +31,4 @@ SessionView.prototype.updateSceneButtons = function ()
 SessionView.prototype.doSelectClipOnLaunch = function ()
 {
     return Config.selectClipOnLaunch;
-};
-
-SessionView.prototype.drawGrid = function ()
-{
-    if (this.surface.isShiftPressed ())
-    {
-        this.drawShiftGrid ();
-        return;
-    }
-
-    AbstractSessionView.prototype.drawGrid.call (this);
-};
-
-SessionView.prototype.onGridNote = function (note, velocity)
-{
-    if (this.surface.isShiftPressed ())
-    {
-        this.onShiftGridNote (note, velocity);
-        return;
-    }
-
-    AbstractSessionView.prototype.onGridNote.call (this, note, velocity);
 };

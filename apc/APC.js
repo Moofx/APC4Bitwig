@@ -485,10 +485,7 @@ APC.prototype.handleEvent = function (note, value, channel)
         case APC_BUTTON_SCENE_LAUNCH_3:
         case APC_BUTTON_SCENE_LAUNCH_4:
         case APC_BUTTON_SCENE_LAUNCH_5:
-            if (this.isShiftPressed ())
-                view.onShiftScene (note - APC_BUTTON_SCENE_LAUNCH_1, event);
-            else
-                view.onScene (note - APC_BUTTON_SCENE_LAUNCH_1, event);
+            view.onScene (note - APC_BUTTON_SCENE_LAUNCH_1, event);
             break;
             
         case APC_BUTTON_CLIP_LAUNCH_1:

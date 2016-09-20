@@ -38,67 +38,13 @@ AbstractView.prototype.updateArrows = function ()
     this.updateSceneButtons ();
 };
 
-AbstractView.prototype.updateSceneButtons = function ()
-{
-    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_1, this.surface.isActiveView (VIEW_SESSION) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_2, this.surface.isActiveView (VIEW_PLAY) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_3, this.surface.isActiveView (VIEW_DRUM) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_4, this.surface.isActiveView (VIEW_SEQUENCER) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-    this.surface.updateButton (APC_BUTTON_SCENE_LAUNCH_5, this.surface.isActiveView (VIEW_RAINDROPS) ? AbstractView.VIEW_SELECTED : AbstractView.VIEW_UNSELECTED);
-};
-
-AbstractView.prototype.drawShiftGrid = function ()
-{
-    // Draw the keyboard
-    var scaleOffset = this.model.getScales ().getScaleOffset ();
-    // 0'C', 1'G', 2'D', 3'A', 4'E', 5'B', 6'F', 7'Bb', 8'Eb', 9'Ab', 10'Db', 11'Gb'
-    for (var i = 7; i < 64; i++)
-        this.surface.pads.light (36 + i, APC_COLOR_BLACK);
-    this.surface.pads.light (36 + 0, scaleOffset == 0 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 1, scaleOffset == 2 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 2, scaleOffset == 4 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 3, scaleOffset == 6 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 4, scaleOffset == 1 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 5, scaleOffset == 3 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 6, scaleOffset == 5 ? AbstractView.KEY_SELECTED : AbstractView.KEY_WHITE);
-    this.surface.pads.light (36 + 9, scaleOffset == 10 ? AbstractView.KEY_SELECTED : AbstractView.KEY_BLACK);
-    this.surface.pads.light (36 + 10, scaleOffset == 8 ? AbstractView.KEY_SELECTED : AbstractView.KEY_BLACK);
-    this.surface.pads.light (36 + 12, scaleOffset == 11 ? AbstractView.KEY_SELECTED : AbstractView.KEY_BLACK);
-    this.surface.pads.light (36 + 13, scaleOffset == 9 ? AbstractView.KEY_SELECTED : AbstractView.KEY_BLACK);
-    this.surface.pads.light (36 + 14, scaleOffset == 7 ? AbstractView.KEY_SELECTED : AbstractView.KEY_BLACK);
-};
-
 //--------------------------------------
 // Transport
 //--------------------------------------
 
-AbstractView.TRANSLATE = [ 0, 2, 4, 6, 1, 3, 5, -1, -1, 10, 8, -1, 11, 9, 7, -1 ];
-
-AbstractView.prototype.onShiftGridNote = function (note, velocity)
-{
-    if (velocity == 0)
-        return;
-
-    var index = note - 36;
-    if (index > 15)
-        return;
-    // Scale Base note selection
-    var pos = AbstractView.TRANSLATE[index];
-    if (pos == -1)
-        return;
-    this.model.getScales ().setScaleOffset (pos);
-    Config.setScaleBase (Scales.BASES[pos]);
-    displayNotification (Scales.BASES[pos]);
-    this.surface.getActiveView ().updateNoteMapping ();
-};
-
 AbstractView.prototype.onPlay = function (event)
 {
-    if (!event.isDown ())
-        return;
-    if (this.surface.isShiftPressed ())
-        this.model.getTransport ().toggleLoop ();
-    else
+    if (event.isDown ())
         this.handlePlayOptions ();
 };
 
@@ -110,12 +56,7 @@ AbstractView.prototype.onStop = function (event)
 
 AbstractView.prototype.onRecord = function (event)
 {
-    if (!event.isDown ())
-        return;
-    
-    if (this.surface.isShiftPressed ())
-        this.onFootswitch2 (127);
-    else
+    if (event.isDown ())
         this.model.getTransport ().record ();
 };
 
@@ -163,18 +104,12 @@ AbstractView.prototype.onCueLevel = function (value)
     this.model.getTransport ().changePosition (value < 65, this.surface.isShiftPressed ());
 };
 
-AbstractView.prototype.onShift = function (event) {};
-
-AbstractView.prototype.onShiftScene = function (index, event)
+AbstractView.prototype.onShift = function (event)
 {
-    if (!event.isDown ())
-        return;
-    var viewID = VIEW_SESSION + index;
-    if (viewID != VIEW_SESSION)
-        this.model.getCurrentTrackBank ().setPreferredView (viewID);
-    this.surface.setActiveView (viewID);
-    // Refresh mode button lights
-    this.surface.setPendingMode (this.surface.getCurrentMode ());
+    if (event.isDown ())
+        this.surface.setActiveView (VIEW_SHIFT);
+    else if (event.isUp () && this.surface.isActiveView (VIEW_SHIFT))
+        this.surface.restoreView ();
 };
 
 AbstractView.prototype.scrollLeft = function (event)
