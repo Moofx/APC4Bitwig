@@ -12,7 +12,7 @@ function Controller (product)
     var output = new MidiOutput ();
     var input = new APCMidiInput ();
     
-    this.scales = new Scales (36, 100, 8, 5);
+    this.scales = new Scales (36, 76, 8, 5);
     setModelSpecificColors (product);
     this.model = new Model (1, this.scales, 8, 5, 8, 6, 16, 16, true);
     

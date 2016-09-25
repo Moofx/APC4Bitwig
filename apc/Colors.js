@@ -110,6 +110,8 @@ function setModelSpecificColors (product)
             AbstractSequencerView.COLOR_STEP_HILITE_CONTENT     = APC_MKII_COLOR_GREEN_LO;
             AbstractSequencerView.COLOR_NO_CONTENT              = APC_MKII_COLOR_BLACK;
             AbstractSequencerView.COLOR_CONTENT                 = APC_MKII_COLOR_BLUE_HI;
+            AbstractSequencerView.COLOR_MEASURE                 = APC_MKII_COLOR_WHITE;
+            AbstractSequencerView.COLOR_ACTIVE_MEASURE          = APC_MKII_COLOR_GREEN_HI;
  
             AbstractDrumView.COLOR_RECORD         = APC_MKII_COLOR_RED_HI;
             AbstractDrumView.COLOR_PLAY           = APC_MKII_COLOR_GREEN_HI;
@@ -117,9 +119,6 @@ function setModelSpecificColors (product)
             AbstractDrumView.COLOR_MUTED          = APC_MKII_COLOR_AMBER_LO;
             AbstractDrumView.COLOR_HAS_CONTENT    = APC_MKII_COLOR_YELLOW_HI;
             AbstractDrumView.COLOR_NO_CONTENT     = APC_MKII_COLOR_YELLOW_LO;
-            AbstractDrumView.COLOR_MEASURE        = APC_MKII_COLOR_WHITE;
-            AbstractDrumView.COLOR_ACTIVE_MEASURE = APC_MKII_COLOR_GREEN_HI;
-            AbstractDrumView.COLOR_OFF            = APC_MKII_COLOR_BLACK;
             break;
 
         default:
@@ -150,6 +149,8 @@ function setModelSpecificColors (product)
             AbstractSequencerView.COLOR_STEP_HILITE_CONTENT     = APC_COLOR_GREEN;
             AbstractSequencerView.COLOR_NO_CONTENT              = APC_COLOR_BLACK;
             AbstractSequencerView.COLOR_CONTENT                 = APC_COLOR_RED;
+            AbstractSequencerView.COLOR_MEASURE        = APC_COLOR_GREEN;
+            AbstractSequencerView.COLOR_ACTIVE_MEASURE = APC_COLOR_YELLOW;
             
             AbstractDrumView.COLOR_RECORD         = APC_COLOR_RED;
             AbstractDrumView.COLOR_PLAY           = APC_COLOR_GREEN;
@@ -157,9 +158,6 @@ function setModelSpecificColors (product)
             AbstractDrumView.COLOR_MUTED          = APC_COLOR_BLACK;
             AbstractDrumView.COLOR_HAS_CONTENT    = APC_COLOR_YELLOW;
             AbstractDrumView.COLOR_NO_CONTENT     = APC_COLOR_BLACK;
-            AbstractDrumView.COLOR_MEASURE        = APC_COLOR_GREEN;
-            AbstractDrumView.COLOR_ACTIVE_MEASURE = APC_COLOR_YELLOW;
-            AbstractDrumView.COLOR_OFF            = APC_COLOR_BLACK;
             
             break;
     }
