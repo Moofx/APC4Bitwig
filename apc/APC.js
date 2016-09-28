@@ -139,6 +139,31 @@ var APC_BUTTONS_ALL =
     APC_BUTTON_BANK
 ];
 
+var APC_BUTTON_UPDATE = initArray (true, 127);
+APC_BUTTON_UPDATE[APC_BUTTON_RECORD_ARM]      = false;
+APC_BUTTON_UPDATE[APC_BUTTON_SOLO]            = false;
+APC_BUTTON_UPDATE[APC_BUTTON_ACTIVATOR]       = false;
+APC_BUTTON_UPDATE[APC_BUTTON_TRACK_SELECTION] = false;
+APC_BUTTON_UPDATE[APC_BUTTON_CLIP_TRACK]      = false;
+APC_BUTTON_UPDATE[APC_BUTTON_DEVICE_ON_OFF]   = false;
+APC_BUTTON_UPDATE[APC_BUTTON_DEVICE_LEFT]     = false;
+APC_BUTTON_UPDATE[APC_BUTTON_DEVICE_RIGHT]    = false;
+APC_BUTTON_UPDATE[APC_BUTTON_DETAIL_VIEW]     = false;
+APC_BUTTON_UPDATE[APC_BUTTON_REC_QUANT]       = false;
+APC_BUTTON_UPDATE[APC_BUTTON_MIDI_OVERDUB]    = false;
+APC_BUTTON_UPDATE[APC_BUTTON_METRONOME]       = false;
+APC_BUTTON_UPDATE[APC_BUTTON_A_B]             = false;
+APC_BUTTON_UPDATE[APC_BUTTON_MASTER]          = false;
+APC_BUTTON_UPDATE[APC_BUTTON_PAN]             = false;
+APC_BUTTON_UPDATE[APC_BUTTON_SEND_A]          = false;
+APC_BUTTON_UPDATE[APC_BUTTON_SEND_B]          = false;
+APC_BUTTON_UPDATE[APC_BUTTON_SEND_C]          = false;
+APC_BUTTON_UPDATE[APC_BUTTON_PLAY]            = false;
+APC_BUTTON_UPDATE[APC_BUTTON_RECORD]          = false;
+APC_BUTTON_UPDATE[APC_BUTTON_SESSION]         = false;
+APC_BUTTON_UPDATE[APC_BUTTON_BANK]            = false;
+
+
 var APC_PRODUCT =
 {
     APC_20     : '7B',
@@ -190,7 +215,10 @@ APC.prototype.updateButtons = function ()
 {
     var view = this.getActiveView ();
     for (var i = 0; i < this.buttons.length; i++)
-        this.updateButton (this.buttons[i], view.usesButton (this.buttons[i]) ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+    {
+        if (APC_BUTTON_UPDATE[this.buttons[i]])
+            this.updateButton (this.buttons[i], view.usesButton (this.buttons[i]) ? APC_BUTTON_STATE_ON : APC_BUTTON_STATE_OFF);
+    }
 };
 
 //--------------------------------------
