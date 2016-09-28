@@ -1,5 +1,4 @@
 // Written by Jürgen Moßgraber - mossgrabers.de
-//            Michael Schmalle - teotigraphix.com
 // (c) 2014-2016
 // Licensed under LGPLv3 - http://www.gnu.org/licenses/lgpl-3.0.txt
 
@@ -8,46 +7,39 @@ function PlayView (model)
     if (model == null)
         return;
     
-    AbstractView.call (this, model);
-
-    this.scales = model.getScales ();
-    this.noteMap = this.scales.getEmptyMatrix ();
-    this.pressedKeys = initArray (0, 128);
-    this.defaultVelocity = [];
-    for (var i = 0; i < 128; i++)
-        this.defaultVelocity.push (i);
-    var tb = model.getTrackBank ();
-    tb.addNoteListener (doObject (this, function (pressed, note, velocity)
-    {
-        // Light notes send from the sequencer
-        for (var i = 0; i < 128; i++)
-        {
-            if (this.noteMap[i] == note)
-                this.pressedKeys[i] = pressed ? velocity : 0;
-        }
-    }));
-    tb.addTrackSelectionListener (doObject (this, function (index, isSelected)
-    {
-        this.clearPressedKeys ();
-    }));
-
-    this.scrollerInterval = Config.trackScrollInterval;
+    AbstractPlayView.call (this, model);
 }
-PlayView.prototype = new AbstractView ();
-
-PlayView.prototype.updateNoteMapping = function ()
-{
-    this.noteMap = this.model.canSelectedTrackHoldNotes () ? this.scales.getNoteMatrix () : this.scales.getEmptyMatrix ();
-    // Workaround: https://github.com/git-moss/Push4Bitwig/issues/7
-    scheduleTask (doObject (this, function () { this.surface.setKeyTranslationTable (this.noteMap); }), null, 100);
-};
+PlayView.prototype = new AbstractPlayView ();
 
 PlayView.prototype.onActivate = function ()
 {
-    AbstractView.prototype.onActivate.call (this);
-
-    this.model.getCurrentTrackBank ().setIndication (false);
+    AbstractPlayView.prototype.onActivate.call (this);
     this.initMaxVelocity ();
+};
+
+PlayView.prototype.onGridNote = function (note, velocity)
+{
+    if (!this.model.canSelectedTrackHoldNotes () || this.noteMap[note] == -1)
+        return;
+    // Mark selected notes
+    this.setPressedKeys (this.noteMap[note], true, velocity);
+    this.surface.sendMidiEvent (0x90, this.noteMap[note], velocity);
+};
+
+PlayView.prototype.scrollUp = function (event)
+{
+    if (this.surface.isShiftPressed ())
+        this.model.getApplication ().arrowKeyLeft ();
+    else
+        this.model.getApplication ().arrowKeyUp ();
+};
+
+PlayView.prototype.scrollDown = function (event)
+{
+    if (this.surface.isShiftPressed ())
+        this.model.getApplication ().arrowKeyRight ();
+    else
+        this.model.getApplication ().arrowKeyDown ();
 };
 
 PlayView.prototype.updateSceneButtons = function ()
@@ -69,25 +61,11 @@ PlayView.prototype.updateArrows = function ()
     AbstractView.prototype.updateArrows.call (this);
 };
 
-PlayView.prototype.drawGrid = function ()
-{
-    var isKeyboardEnabled = this.model.canSelectedTrackHoldNotes ();
-    var isRecording = this.model.hasRecordingState ();
-
-    var tb = this.model.getCurrentTrackBank ();
-    var selectedTrack = tb.getSelectedTrack ();
-
-    for (var i = 36; i < 76; i++)
-    {
-        this.surface.pads.light (i, isKeyboardEnabled ? (this.pressedKeys[i] > 0 ?
-            (isRecording ? AbstractSessionView.CLIP_COLOR_IS_RECORDING.color : AbstractSessionView.CLIP_COLOR_IS_PLAYING.color) :
-                this.getColor (i, selectedTrack)) : APC_COLOR_BLACK, null, false);
-    }
-};
-
 PlayView.prototype.onScene = function (scene, event)
 {
     if (!event.isDown ())
+        return;
+    if (!this.model.canSelectedTrackHoldNotes ())
         return;
     switch (scene)
     {
@@ -117,51 +95,6 @@ PlayView.prototype.onScene = function (scene, event)
     this.updateNoteMapping ();
 };
 
-PlayView.prototype.onGridNote = function (note, velocity)
-{
-    if (!this.model.canSelectedTrackHoldNotes ())
-        return;
-
-    this.surface.sendMidiEvent (0x90, this.noteMap[note], velocity);
-        
-    // Mark selected notes
-    for (var i = 0; i < 128; i++)
-    {
-        if (this.noteMap[note] == this.noteMap[i])
-            this.pressedKeys[i] = velocity;
-    }
-};
-
-PlayView.prototype.onOctaveDown = function (event)
-{
-    this.clearPressedKeys ();
-    this.scales.decOctave ();
-    displayNotification (this.scales.getRangeText ());
-};
-
-PlayView.prototype.onOctaveUp = function (event)
-{
-    this.clearPressedKeys ();
-    this.scales.incOctave ();
-    displayNotification (this.scales.getRangeText ());
-};
-
-PlayView.prototype.scrollUp = function (event)
-{
-    if (this.surface.isShiftPressed ())
-        this.model.getApplication ().arrowKeyLeft ();
-    else
-        this.model.getApplication ().arrowKeyUp ();
-};
-
-PlayView.prototype.scrollDown = function (event)
-{
-    if (this.surface.isShiftPressed ())
-        this.model.getApplication ().arrowKeyRight ();
-    else
-        this.model.getApplication ().arrowKeyDown ();
-};
-
 PlayView.prototype.onAccent = function (event)
 {
     AbstractView.prototype.onAccent.call (this, event);
@@ -174,10 +107,4 @@ PlayView.prototype.initMaxVelocity = function ()
     this.maxVelocity = initArray (Config.fixedAccentValue, 128);
     this.maxVelocity[0] = 0;
     this.surface.setVelocityTranslationTable (Config.accentActive ? this.maxVelocity : this.defaultVelocity);
-};
-
-PlayView.prototype.clearPressedKeys = function ()
-{
-    for (var i = 0; i < 128; i++)
-        this.pressedKeys[i] = 0;
 };
