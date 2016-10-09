@@ -9,9 +9,6 @@ function Controller (product)
 {
     Config.init ();
 
-    var output = new MidiOutput ();
-    var input = new APCMidiInput ();
-    
     this.scales = new Scales (36, 76, 8, 5);
     setModelSpecificColors (product);
     this.model = new Model (1, this.scales, 8, 5, 8, 6, 16, 16, true);
@@ -19,6 +16,8 @@ function Controller (product)
     // this.lastSlotSelection = null;
     this.model.getTrackBank ().addTrackSelectionListener (doObject (this, Controller.prototype.handleTrackChange));
     
+    var output = new MidiOutput ();
+    var input = new MidiInput ();
     this.surface = new APC (output, input, product);
     var i;
     for (i = 0; i < 8; i++)
