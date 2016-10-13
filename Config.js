@@ -22,12 +22,6 @@ Config.sceneScrollInterval = 100;
 // Editable configurations
 // ------------------------------
 
-Config.SCALES_SCALE          = 0;
-Config.SCALES_BASE           = 1;
-Config.SCALES_IN_KEY         = 2;
-Config.BEHAVIOUR_ON_STOP     = 3;
-Config.SELECT_CLIP_ON_LAUNCH = 4;
-
 Config.initListeners (Config.SELECT_CLIP_ON_LAUNCH);
 
 
