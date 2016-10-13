@@ -459,8 +459,11 @@ AbstractView.prototype.onWriteClipAutomation = function (event)
 
 AbstractView.prototype.onQuantize = function (event)
 {
-    if (event.isDown ())
-        this.model.getApplication ().quantize ();
+    if (!event.isDown ())
+        return;
+    // We can use any cursor clip, e.g. the one of the drum view
+    var view = this.surface.getView (VIEW_DRUM);
+    view.clip.quantize (Config.quantizeAmount / 100);
 };
 
 AbstractView.prototype.onDetailView = function (event)

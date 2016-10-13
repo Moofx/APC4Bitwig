@@ -22,7 +22,7 @@ Config.sceneScrollInterval = 100;
 // Editable configurations
 // ------------------------------
 
-Config.initListeners (Config.SELECT_CLIP_ON_LAUNCH);
+Config.initListeners (Config.QUANTIZE_AMOUNT);
 
 
 Config.init = function ()
@@ -41,4 +41,9 @@ Config.init = function ()
 
     Config.activateBehaviourOnStopSetting (prefs);
     Config.activateSelectClipOnLaunchSetting (prefs);
+    
+    ///////////////////////////
+    // Play and Sequencer
+
+    Config.activateQuantizeAmountSetting (prefs);
 };
