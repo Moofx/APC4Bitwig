@@ -110,6 +110,7 @@ function setModelSpecificColors (product)
             AbstractSequencerView.COLOR_STEP_HILITE_CONTENT     = APC_MKII_COLOR_GREEN_LO;
             AbstractSequencerView.COLOR_NO_CONTENT              = APC_MKII_COLOR_BLACK;
             AbstractSequencerView.COLOR_CONTENT                 = APC_MKII_COLOR_BLUE_HI;
+            AbstractSequencerView.COLOR_CONTENT_CONT            = APC_MKII_COLOR_BLUE_LO;
             AbstractSequencerView.COLOR_MEASURE                 = APC_MKII_COLOR_WHITE;
             AbstractSequencerView.COLOR_ACTIVE_MEASURE          = APC_MKII_COLOR_GREEN_HI;
  
@@ -153,8 +154,9 @@ function setModelSpecificColors (product)
             AbstractSequencerView.COLOR_STEP_HILITE_CONTENT     = APC_COLOR_GREEN;
             AbstractSequencerView.COLOR_NO_CONTENT              = APC_COLOR_BLACK;
             AbstractSequencerView.COLOR_CONTENT                 = APC_COLOR_RED;
-            AbstractSequencerView.COLOR_MEASURE        = APC_COLOR_GREEN;
-            AbstractSequencerView.COLOR_ACTIVE_MEASURE = APC_COLOR_YELLOW;
+            AbstractSequencerView.COLOR_CONTENT_CONT            = APC_COLOR_RED;
+            AbstractSequencerView.COLOR_MEASURE                 = APC_COLOR_GREEN;
+            AbstractSequencerView.COLOR_ACTIVE_MEASURE          = APC_COLOR_YELLOW;
             
             AbstractPlayView.COLOR_PLAY   = APC_COLOR_GREEN;
             AbstractPlayView.COLOR_RECORD = APC_COLOR_RED;
